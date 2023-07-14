@@ -24,7 +24,7 @@
             <li><a class="dropdown-item" href="{% url 'purchases:entries' %}">Listado</a></li>
             {% endif %}
             {% if perms.purchases.add_invoice %}
-            <li><a class="dropdown-item" href="{% url 'purchases:invoice' %}">Facturar</a></li>
+            <li><a class="dropdown-item" href="{% url 'purchases:selfbilling' %}">Facturar</a></li>
             {% endif %}
             {% if perms.purchases.change_invoice %}
             <li><a class="dropdown-item" href="#">Liquidación</a></li>

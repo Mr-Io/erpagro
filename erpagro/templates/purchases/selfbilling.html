@@ -1,6 +1,17 @@
-{% extends "base/base.html" %} {% load base_filters %}{% load static %} {% load humanize %} {% block head %}
-<script src="{% static 'frontend/purchases/invoice.js' %}"></script>
-{% endblock head %} {% block section %} {% csrf_token %}
+{% extends "base/base.html" %} 
+{% load base_filters %}
+{% load static %} 
+{% load humanize %} 
+
+{% block head %}
+<script src="{% static 'frontend/purchases/selfbilling.js' %}"></script>
+{% endblock head %} 
+{% block section %} 
+{% csrf_token %}
+{% if new_invoice_pk %}
+<a target="_blank" href="{% url 'archive:purchases_invoice_pdf' new_invoice_pk %}" hidden></a>
+{% endif %}
+
 <div class="container-sm">
     <form id="daterange-form">
         <div class="row">

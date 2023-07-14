@@ -30,6 +30,8 @@ urlpatterns = [
 
     path("frontend/", include("frontend.urls")),
 
+    path("archive/", include("archive.urls")),
+
     path("api/", include("api.urls")),
     path('api-auth/', include('rest_framework.urls')),
 ]

@@ -1,12 +1,15 @@
+import io
+import os
+from reportlab.pdfgen import canvas 
 import decimal
 from utils.func import convert_dotted_json
 
+from django.conf import settings
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_date
-from django.core.exceptions import ValidationError
 
 from rest_framework import status
 
@@ -18,6 +21,7 @@ from .models import Supplier, CarrierAgent
 from packaging.models import Packaging, Transaction
 from purchases.models import EntryNote, Entry, Warehouse, Invoice
 from product.models import AgrofoodType
+from archive import pdfutils
 # Create your views here.
 
 
@@ -108,7 +112,7 @@ def entries(request):
 
 
 @permission_required("purchases.add_invoice")
-def invoice(request):
+def selfbilling(request):
     # if dates in query -> get list of entrynotes and suppliers ready to invoice 
     datefrom = parse_date(request.GET.get("datefrom", ""))
     dateto = parse_date(request.GET.get("dateto", ""))
@@ -141,7 +145,7 @@ def invoice(request):
 
 
     if request.method == "GET":
-        return render(request, "purchases/invoice.html", {"datefrom": datefrom,
+        return render(request, "purchases/selfbilling.html", {"datefrom": datefrom,
                                                           "dateto": dateto,
                                                           "suppliers": suppliers,
                                                           "supplier_pk": supplier_pk,
@@ -154,13 +158,13 @@ def invoice(request):
         new_invoice.entrynotes.add(*(e for e in invoice_entrynotes))
         new_invoice.full_clean()
 
-        if (supplier not in suppliers):
-            supplier_pk = None
-            entrynotes = EntryNote.objects.none()
+        #buffer = pdfutils.save(new_invoice)
+        #return FileResponse(buffer, as_attachment=True, filename=os.path.basename("invoice.pdf"))
 
-        return render(request, "purchases/invoice.html", {"msg": "Factura guardada con éxito",
-                                                          "datefrom": datefrom,
-                                                          "dateto": dateto,
-                                                          "suppliers": suppliers,
-                                                          "supplier_pk": supplier_pk,
-                                                          "entrynotes": entrynotes,})
+        return render(request, "purchases/selfbilling.html", {"new_invoice_pk": new_invoice.pk,
+                                                              "msg": "Autofactura generada y guardada con éxito",
+                                                              "datefrom": datefrom,
+                                                              "dateto": dateto,
+                                                              "suppliers": suppliers,
+                                                              "supplier_pk": supplier_pk,
+                                                              "entrynotes": entrynotes,})

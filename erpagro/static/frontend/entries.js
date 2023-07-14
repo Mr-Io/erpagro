@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     let table = new DataTable('#entry-table', {
         paging: false,
-        orderFixed: [[5, 'asc']],
+        orderFixed: [[5, 'desc']],
         fixedHeader: true,
         rowGroup: { 
             dataSrc: row => {

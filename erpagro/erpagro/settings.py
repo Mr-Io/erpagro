@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "quality.apps.QualityConfig",
     "accounting.apps.AccountingConfig",
     "accounts.apps.AccountsConfig",
+    "archive.apps.ArchiveConfig",
     "rest_framework",
     "mathfilters",
     "frontend.apps.FrontendConfig",
